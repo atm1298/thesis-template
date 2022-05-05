@@ -7,7 +7,8 @@ Mit Inspiration von: [Kompiliertes PDF](https://malteschmitz.github.io/latex-the
 Es handelt sich _nicht_ um eine offizielle Vorlage. Ob diese Vorlage eventuell vorhandenen Gestaltungsvorgaben entspricht, ist im Zweifelsfall mit den jeweils zuständigen Institutionen abzusprechen.
 
 
-Zur Nutzung in VS Code:
+# Zur Nutzung in VS Code:
+
 Erweiterungen: LaTeX Workshop
 
 In die Preferences: Open Settings (JSON):
