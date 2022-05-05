@@ -8,3 +8,13 @@ Es handelt sich _nicht_ um eine offizielle Vorlage. Ob diese Vorlage eventuell v
 
 
 Zur Nutzung in VS Code:
+Erweiterungen: LaTeX Workshop
+
+In die Preferences: Open Settings (JSON):
+
+    "latex-workshop.latex.recipes": [
+        {
+            "name": "pdflatex ➞ bibtex ➞ pdflatex × 2",
+            "tools": ["pdflatex", "bibtex", "pdflatex", "pdflatex"]
+        }
+    ]
