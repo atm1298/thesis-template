@@ -16,31 +16,64 @@
 \usepackage{courier}
 % Load package to configure header and footer
 \usepackage{scrlayer-scrpage}
-
+\usepackage{longtable}
 \usepackage{acronym}
+\usepackage{setspace}
+\setstretch{1.2}
+
+% Anforderungenreferenzierung
+% Um in Tabellen referenzieren zu können vorher: \setanf{Buchstabe}
+% Zum Referenzieren: \anfref{Z40}
+% Achtung: Wenn die Reinfolge geändert wird, muss die Zahl der Referenzierung angepasst werden
+\usepackage{array}
+\usepackage{etoolbox}
+\usepackage{longtable}
+
+\newcommand\anfletter{Q}
+
+\newcommand\setanf[1]{\renewcommand\anfletter{#1}}
+
+\newcounter{anfnumber}
+\newcounter{anfsubnumber}
+\newcommand\showanfnumber{
+        \sffamily\color{maincolor}{/\anfletter\arabic{anfnumber}\arabic{anfsubnumber}/}
+        \def\@currentlabel{/\arabic{anfnumber}\arabic{anfsubnumber}/}
+        \label{anf:\anfletter\arabic{anfnumber}\arabic{anfsubnumber}}
+}
+
+\newcommand\anfrow{\setcounter{anfsubnumber}{0}\refstepcounter{anfnumber}\showanfnumber}
+\newcommand\anfsubrow{\refstepcounter{anfsubnumber}\showanfnumber}
+
+\newcommand{\anfref}[1]{\hyperref[anf:#1]{/#1/}}
+
+\preto\tabular{\setcounter{anfnumber}{0}}
+\preto\tabular{\setcounter{anfsubnumber}{0}}
+
+\preto\longtable{\setcounter{anfnumber}{0}}
+\preto\longtable{\setcounter{anfsubnumber}{0}}
+
 
 
 % Set some options regarding the document layout. See KOMA guide
 \KOMAoptions{%
-  paper=a4,
-  fontsize=11pt,
-  parskip=half,
-  headings=normal,
-  BCOR=1cm,
-  headsepline,
-  headsepline=0.5pt,
-  DIV=12}
+        paper=a4,
+        fontsize=11pt,
+        parskip=half,
+        headings=normal,
+        BCOR=1cm,
+        headsepline,
+        headsepline=0.5pt,
+        DIV=13}
 
 % do not align bottom of pages
 \raggedbottom
 
 % set style of captions
-\setcapindent{0pt} % do not indent second line of captions
+\setcapindent{24pt} % do not indent second line of captions
 \setkomafont{caption}{\small}
-\setkomafont{captionlabel}{\bfseries}
-\setcapwidth[c]{0.9\textwidth}
-
-
+\setkomafont{caption}{\vspace*{3mm}}
+\setkomafont{captionlabel}{\textbf}
+\setcapwidth[c]{1\textwidth}
 
 % load extended tabulars used in the list of abbreviation
 \usepackage{tabularx}
@@ -52,17 +85,28 @@
 
 
 % define new environment for zebra tables
-\newcommand{\mainrowcolors}{\rowcolors{1}{maincolor!25}{maincolor!5}}
+\usepackage{colortbl}
+\newcommand{\mainrowcolors}{\rowcolors{1}{white}{white}}
 \newenvironment{zebratabular}{\mainrowcolors\begin{tabular}}{\end{tabular}}
 \newcommand{\setrownumber}[1]{\global\rownum#1\relax}
-\newcommand{\headerrow}{\rowcolor{maincolor!50}\setrownumber1}
+%\newcommand{\headerrow}{\normalfont\sffamily\color{maincolor}\setrownumber1}
+%\rowcolor{maincolor!50}
+\renewcommand{\arraystretch}{1.3}
 
 % add main color to section headers
-\addtokomafont{chapter}{\color{maincolor}}
-\addtokomafont{section}{\color{maincolor}}
-\addtokomafont{subsection}{\color{maincolor}}
-\addtokomafont{subsubsection}{\color{maincolor}}
-\addtokomafont{paragraph}{\color{maincolor}}
+\usepackage[outermarks,noindentafter,nobottomtitles]{titlesec}
+\titleformat{\section}[hang]{\Large\sffamily\color{maincolor}}{\thetitle}{8pt}{\vspace{-2mm}}{}
+\titleformat{\subsection}[hang]{\large\sffamily\color{maincolor}}{\thetitle}{8pt}{}
+\titleformat{\subsubsection}[hang]{\normalfont\sffamily\color{maincolor}}{\thetitle}{8pt}{}
+\titleformat{\paragraph}[hang]{\bfseries\sffamily\color{maincolor}}{\thetitle}{8pt}{}
+
+% Etwas aufwendiger für die Kapitelüberschriften:
+\titleformat{\chapter}[display]
+{\huge\sffamily\color{maincolor}}
+{\color{maincolor!30}\fontsize{60pt}{40pt}\selectfont\thechapter}
+{-0.2cm} %is vertical space in [display] mode
+{\vspace{-2mm}} %1ex ist die Hähe von x im aktuellen Font
+[\vspace{-4mm}]
 
 % do not print numbers next to each formula
 \usepackage{mathtools}
@@ -89,18 +133,18 @@
 
 % load additional libraries for TikZ
 \usetikzlibrary{%
-  automata,%
-  positioning,%
+        automata,%
+        positioning,%
 }
 
 % set some default options for TikZ -- in this case for automata
 \tikzset{
-  every state/.style={
-      draw=maincolor,
-      thick,
-      fill=maincolor!18,
-      minimum size=0pt
-    }
+        every state/.style={
+                        draw=maincolor,
+                        thick,
+                        fill=maincolor!18,
+                        minimum size=0pt
+                }
 }
 
 % load listings package to typeset sourcecode
@@ -108,13 +152,13 @@
 
 % set some options for the listings package
 \lstset{%
-  upquote=true,%
-  showstringspaces=false,%
-  captionpos=b,%
-  basicstyle=\ttfamily,%
-  keywordstyle=\color{keywordcolor}\slshape,%
-  commentstyle=\color{commentcolor}\itshape,%
-  stringstyle=\color{stringcolor}}
+        upquote=true,%
+        showstringspaces=false,%
+        captionpos=b,%
+        basicstyle=\ttfamily,%
+        keywordstyle=\color{keywordcolor}\slshape,%
+        commentstyle=\color{commentcolor}\itshape,%
+        stringstyle=\color{stringcolor}}
 \renewcommand{\lstlistingname}{Quelltext}
 \renewcommand{\lstlistlistingname}{Quelltextverzeichnis}
 
@@ -131,11 +175,11 @@ literate={ö}{{\"o}}1
 
 % define style for pseudo code
 \lstdefinestyle{pseudo}{language={},%
-  basicstyle=\normalfont,%
-  morecomment=[l]{//},%
-  morekeywords={for,to,while,do,if,then,else},%
-  mathescape=true,%
-  columns=fullflexible}
+        basicstyle=\normalfont,%
+        morecomment=[l]{//},%
+        morekeywords={for,to,while,do,if,then,else},%
+        mathescape=true,%
+        columns=fullflexible}
 
 % load the AMS math library to typeset formulas
 \usepackage{amsmath}
@@ -149,14 +193,19 @@ literate={ö}{{\"o}}1
 % load varioref and hyperref to create nicer references using vref
 \usepackage[ngerman]{varioref}
 \PassOptionsToPackage{hyphens}{url} % allow line break at hyphens in URLs
+
+\usepackage{varioref}
 \usepackage{hyperref}
+\newcommand{\ssecref}[1]{\hyperref[{#1}]{\autoref{#1}: „\nameref{#1}“}}
+\newcommand*{\secref}[1]{\hyperref[{#1}]{\ref*{#1} \nameref*{#1}}}
+
 
 % setup hyperref
 \hypersetup{breaklinks=true,
-  pdfborder={0 0 0},
-  ngerman,
-  pdfhighlight={/N},
-  pdfdisplaydoctitle=true}
+        pdfborder={0 0 0},
+        ngerman,
+        pdfhighlight={/N},
+        pdfdisplaydoctitle=true}
 
 % Fix bugs in some package, e.g. listings and hyperref
 \usepackage{scrhack}
@@ -197,3 +246,7 @@ literate={ö}{{\"o}}1
 
 \declaretheorem[sibling=Theorem,style=definition]{Bemerkung}
 \labelformat{Bemerkung}{Bemerkung\ #1}
+
+% definiert ebenen des Inhaltverzeichnis  
+\setcounter{secnumdepth}{2}
+\setcounter{tocdepth}{1}
