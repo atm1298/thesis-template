@@ -9,7 +9,7 @@ Es handelt sich _nicht_ um eine offizielle Vorlage. Ob diese Vorlage eventuell v
 
 ## Zur Nutzung in VS Code:
 
-Erweiterungen: LaTeX Workshop
+Benötigte Erweiterungen: LaTeX Workshop
 
 In die Preferences: Open Settings (JSON):
 
@@ -19,3 +19,7 @@ In die Preferences: Open Settings (JSON):
             "tools": ["pdflatex", "bibtex", "pdflatex", "pdflatex"]
         }
     ]
+
+## Hilfreiche Erweiterungen 
+1. Rewrap
+2. LTeX – LanguageTool grammar/spell checking
